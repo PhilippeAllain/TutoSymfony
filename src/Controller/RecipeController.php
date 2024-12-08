@@ -19,12 +19,12 @@ class RecipeController extends AbstractController
     {
         $recipes = $repository->findAll();
 
-        return $this->render('recipe/index.html.twig', [
+        return $this->render('recipe/index.html.twig', [ /* on utilise la méthode render disponible grace à AbstractController */
             'recipes' => $recipes
         ]);
     }
 
-    #[Route('/recettes{slug}-{id}', name: 'recipe.show', requirements: ['id' => '\d+', 'slug' => '[a-z0-9-]+'])]
+    #[Route('/recettes/{slug}-{id}', name: 'recipe.show', requirements: ['id' => '\d+', 'slug' => '[a-z0-9-]+'])] /* requirements permet de spécifié les paramètres attendus */
     public function show(Request $request, string $slug, int $id, RecipeRepository $repository): Response
     {
         $recipe = $repository->find($id);

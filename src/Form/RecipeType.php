@@ -7,25 +7,31 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+
 
 class RecipeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('slug')
+            ->add('title', TextType::class, [
+                'empty_data' => ''
+            ])
+            ->add('slug', TextType::class, [
+                'required' => false,
+            ])
             ->add('content')
             ->add('duration')
             ->add('Save', SubmitType::class, [
                 'label' => 'Envoyer'
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimestamp(...))
+            ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimestamps(...))
         ;
     }
 
@@ -40,7 +46,7 @@ class RecipeType extends AbstractType
         
     }
 
-    public function attachTimestamp(PostSubmitEvent $event): void
+    public function attachTimestamps(PostSubmitEvent $event): void
     {
         $data = $event->getData();
         if (!($data instanceof Recipe)){
