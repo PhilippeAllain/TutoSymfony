@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Recipe;
 
 class CategoryType extends AbstractType
 {
@@ -25,6 +27,7 @@ class CategoryType extends AbstractType
                 'required' => false,
                 'empty_data' => '',
             ])
+
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',              
             ])

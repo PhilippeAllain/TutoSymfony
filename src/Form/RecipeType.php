@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Recipe;
+use Dom\Entity;
 use Symfony\Component\Form\AbstractType;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -11,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Category;
 
 class RecipeType extends AbstractType
 {
@@ -27,6 +30,12 @@ class RecipeType extends AbstractType
             ])
             ->add('slug', TextType::class, [
                 'required' => false,
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'expanded' => true,
+                'choice_label' => 'name',
+                
             ])
             ->add('content',  TextareaType::class, [
                 'empty_data' => ''
