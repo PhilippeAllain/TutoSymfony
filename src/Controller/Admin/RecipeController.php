@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Recipe;
-use App\Entity\Category;
+
 use App\Form\RecipeType;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
@@ -13,15 +13,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 #[Route("/admin/recettes", name: 'admin.recipe.')]
+#[IsGranted('ROLE_ADMIN')]
 class RecipeController extends AbstractController
 {
-
     #[Route('/', name: 'index')]
     public function index(RecipeRepository $repository, CategoryRepository $categoryRepository, EntityManagerInterface $em): Response
     {
+        
         $recipes = $repository->findWithDurationLowerThan(20);
 
         return $this->render('admin/recipe/index.html.twig', [
