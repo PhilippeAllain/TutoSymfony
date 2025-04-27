@@ -21,15 +21,16 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(RecipeRepository $repository, CategoryRepository $categoryRepository, EntityManagerInterface $em): Response
+    public function index(RecipeRepository $repository, Request $request): Response
     {
+        $page = $request->query->getInt('page', 1);
+        $recipes = $repository->paginateRecipe($page);
         
-        $recipes = $repository->findWithDurationLowerThan(20);
-
         return $this->render('admin/recipe/index.html.twig', [
-            'recipes' => $recipes
+            'recipes' => $recipes,
         ]);
     }
+
 
     #[Route('/create', name: 'create')]
     public function create(Request $request, EntityManagerInterface $em): Response {
